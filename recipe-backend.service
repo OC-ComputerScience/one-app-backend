@@ -1,5 +1,5 @@
 [Unit]
-Description=NodeJS Recipe Backend
+Description=NodeJS One App Backend
 After=network.target
  
 [Service]

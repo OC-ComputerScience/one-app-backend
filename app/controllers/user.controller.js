@@ -44,10 +44,13 @@ exports.create = async (req, res) => {
         const user = {
           id: req.body.id,
           firstName: req.body.firstName,
+          middleName: req.body.middleName,
           lastName: req.body.lastName,
           email: req.body.email,
           password: hash,
           salt: salt,
+          roleId: req.body.roleId,
+          universityId: req.body.universityId
         };
 
         // Save User in the database
