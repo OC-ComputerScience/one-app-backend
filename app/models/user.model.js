@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    middleName: {
+      type: Sequelize.STRING
+    },
     lastName: {
       type: Sequelize.STRING,
       allowNull: false,
