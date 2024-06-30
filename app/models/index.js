@@ -23,6 +23,7 @@ db.recipeIngredient = require("./recipeIngredient.model.js")(
 );
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
+db.role = require("./role.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -35,6 +36,14 @@ db.session.belongsTo(
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+
+// foreign key for users
+db.role.hasMany(db.user, {
+  foreignKey: { allowNull: false },
+});
+db.user.belongsTo(db.role, {
+  foreignKey: { allowNull: false },
+});
 
 // foreign key for recipe
 db.user.hasMany(
