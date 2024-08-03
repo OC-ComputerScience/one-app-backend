@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/nodeapps/recipe-backend/
+WorkingDirectory=/home/ubuntu/nodeapps/one-app-backend/
 ExecStart=/usr/bin/npm run start
 Restart=on-failure
  

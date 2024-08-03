@@ -42,7 +42,6 @@ exports.create = async (req, res) => {
 
         // Create a User
         const user = {
-          id: req.body.id,
           firstName: req.body.firstName,
           middleName: req.body.middleName,
           lastName: req.body.lastName,

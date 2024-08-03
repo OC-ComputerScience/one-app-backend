@@ -1,6 +1,6 @@
 module.exports = (app) => {
     const role = require("../controllers/role.controller.js");
-    const { authenticate } = require("../authorization/authorization.js");
+    const { authenticate } = require("../authentication/authentication.js");
     var router = require("express").Router();
   
     // Create a new role
@@ -16,6 +16,6 @@ module.exports = (app) => {
     // Delete all roles
     router.delete("/", [authenticate], role.deleteAll);
   
-    app.use("/oneapp-api/role", router);
+    app.use("/oneapp-api/roles", router);
   };
   

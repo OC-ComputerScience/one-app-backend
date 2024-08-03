@@ -14,16 +14,116 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.ingredient = require("./ingredient.model.js")(sequelize, Sequelize);
-db.recipe = require("./recipe.model.js")(sequelize, Sequelize);
-db.recipeStep = require("./recipeStep.model.js")(sequelize, Sequelize);
-db.recipeIngredient = require("./recipeIngredient.model.js")(
-  sequelize,
-  Sequelize
-);
-db.session = require("./session.model.js")(sequelize, Sequelize);
-db.user = require("./user.model.js")(sequelize, Sequelize);
+db.appFieldValue = require("./appFieldValue.model.js")(sequelize, Sequelize);
+db.application = require("./application.model.js")(sequelize, Sequelize);
+db.downloadLog = require("./downloadLog.model.js")(sequelize, Sequelize);
+db.field = require("./field.model.js")(sequelize, Sequelize);
+db.fieldPageGroup = require("./fieldPageGroup.model.js")(sequelize, Sequelize);
+db.fieldValue = require("./fieldValue.model.js")(sequelize, Sequelize);
+db.page = require("./page.model.js")(sequelize, Sequelize);
+db.pageGroup = require("./pageGroup.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
+db.session = require("./session.model.js")(sequelize, Sequelize);
+db.university = require("./university.model.js")(sequelize, Sequelize);
+db.userUniversity = require("./userUniversity.model.js")(sequelize, Sequelize);
+db.user = require("./user.model.js")(sequelize, Sequelize);
+
+
+// foreign key for app field value
+db.application.hasMany(
+  db.appFieldValue,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.appFieldValue.belongsTo(
+  db.application,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.field.hasMany(
+  db.appFieldValue,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.appFieldValue.belongsTo(
+  db.field,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.fieldValue.hasMany(
+  db.appFieldValue,
+  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
+);
+db.appFieldValue.belongsTo(
+  db.fieldValue,
+  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
+);
+
+// foreign key for application
+db.user.hasMany(
+  db.application,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.application.belongsTo(
+  db.user,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// foreign key for download log
+db.university.hasMany(
+  db.downloadLog,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.downloadLog.belongsTo(
+  db.university,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.user.hasMany(
+  db.downloadLog,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.downloadLog.belongsTo(
+  db.user,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// foreign key for field value
+db.field.hasMany(
+  db.fieldValue,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.fieldValue.belongsTo(
+  db.field,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// foreign key for field group page
+db.field.hasMany(
+  db.fieldPageGroup,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.fieldPageGroup.belongsTo(
+  db.field,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.page.hasMany(
+  db.fieldPageGroup,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.fieldPageGroup.belongsTo(
+  db.page,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// foreign key for group page
+db.page.hasMany(
+  db.pageGroup,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.pageGroup.belongsTo(
+  db.page,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
 
 // foreign key for session
 db.user.hasMany(
@@ -45,59 +145,29 @@ db.user.belongsTo(db.role, {
   foreignKey: { allowNull: false },
 });
 
-// foreign key for recipe
+db.university.hasMany(db.user, {
+  foreignKey: { allowNull: true },
+});
+db.user.belongsTo(db.university, {
+  foreignKey: { allowNull: true },
+});
+
+// foreign key for user university
+db.university.hasMany(
+  db.userUniversity,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.userUniversity.belongsTo(
+  db.university,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
 db.user.hasMany(
-  db.recipe,
-  { as: "recipe" },
+  db.userUniversity,
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.recipe.belongsTo(
+db.userUniversity.belongsTo(
   db.user,
-  { as: "user" },
-  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
-);
-
-// foreign key for recipeStep
-db.recipe.hasMany(
-  db.recipeStep,
-  { as: "recipeStep" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipeStep.belongsTo(
-  db.recipe,
-  { as: "recipe" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-
-// foreign keys for recipeIngredient
-db.recipeStep.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipe.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.ingredient.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipeIngredient.belongsTo(
-  db.recipeStep,
-  { as: "recipeStep" },
-  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
-);
-db.recipeIngredient.belongsTo(
-  db.recipe,
-  { as: "recipe" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipeIngredient.belongsTo(
-  db.ingredient,
-  { as: "ingredient" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
