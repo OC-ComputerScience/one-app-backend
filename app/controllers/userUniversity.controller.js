@@ -50,7 +50,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single UserUniversity with an id
-exports.findOne = (req, res) => {
+exports.findById = (req, res) => {
   const id = req.params.id;
 
   UserUniversity.findByPk(id)

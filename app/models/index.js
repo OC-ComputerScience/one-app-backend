@@ -50,11 +50,11 @@ db.appFieldValue.belongsTo(
 
 db.fieldValue.hasMany(
   db.appFieldValue,
-  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
+  { foreignKey: { as: "fieldValueId", allowNull: true }, onDelete: "CASCADE" }
 );
 db.appFieldValue.belongsTo(
   db.fieldValue,
-  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
+  { foreignKey: { as: "fieldValueId", allowNull: true }, onDelete: "CASCADE" }
 );
 
 // foreign key for application

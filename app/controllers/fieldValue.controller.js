@@ -50,7 +50,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single FieldValue with an id
-exports.findOne = (req, res) => {
+exports.findById = (req, res) => {
   const id = req.params.id;
 
   FieldValue.findByPk(id)

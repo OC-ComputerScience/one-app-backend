@@ -10,7 +10,7 @@ module.exports = (app) => {
   router.get("/", [authenticate], user.findAll);
 
   // Retrieve a single User with id
-  router.get("/:id", [authenticate], user.findOne);
+  router.get("/:id", [authenticate], user.findById);
 
   // Update a User with id
   router.put("/:id", [authenticate], user.update);

@@ -21,7 +21,7 @@ exports.create = (req, res) => {
     applicationId: req.body.applicationId,
     fieldId: req.body.fieldId,
     fieldValueId: req.body.fieldValueId,
-    fieldValue: req.body.fieldValue
+    fieldValueName: req.body.fieldValueName
   };
   // Save AppFieldValue in the database
   AppFieldValue.create(appFieldValue)
@@ -53,7 +53,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single AppFieldValue with an id
-exports.findOne = (req, res) => {
+exports.findById = (req, res) => {
   const id = req.params.id;
 
   AppFieldValue.findByPk(id)

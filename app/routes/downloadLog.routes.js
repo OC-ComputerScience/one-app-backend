@@ -10,7 +10,7 @@ module.exports = (app) => {
   router.get("/", [authenticate], downloadLog.findAll);
 
   // Retrieve a single DownloadLog with downloadLogId
-  router.get("/:id", [authenticate], downloadLog.findOne);
+  router.get("/:id", [authenticate], downloadLog.findById);
 
   // Update an DownloadLog with downloadLogId
   router.put("/:id", [authenticate], downloadLog.update);
