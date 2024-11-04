@@ -26,7 +26,7 @@ exports.create = async (req, res) => {
   }
 
   // find by email
-  await User.findOne({
+  await User.findById({
     where: {
       email: req.body.email,
     },
@@ -42,12 +42,14 @@ exports.create = async (req, res) => {
 
         // Create a User
         const user = {
-          id: req.body.id,
           firstName: req.body.firstName,
+          middleName: req.body.middleName,
           lastName: req.body.lastName,
           email: req.body.email,
           password: hash,
           salt: salt,
+          roleId: req.body.roleId,
+          universityId: req.body.universityId
         };
 
         // Save User in the database
@@ -108,7 +110,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single User with an id
-exports.findOne = (req, res) => {
+exports.findById = (req, res) => {
   const id = req.params.id;
 
   User.findByPk(id)
@@ -132,7 +134,7 @@ exports.findOne = (req, res) => {
 exports.findByEmail = (req, res) => {
   const email = req.params.email;
 
-  User.findOne({
+  User.findById({
     where: {
       email: email,
     },
