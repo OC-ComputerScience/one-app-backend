@@ -26,7 +26,7 @@ exports.create = async (req, res) => {
   }
 
   // find by email
-  await User.findById({
+  await User.findOne({
     where: {
       email: req.body.email,
     },
@@ -48,8 +48,8 @@ exports.create = async (req, res) => {
           email: req.body.email,
           password: hash,
           salt: salt,
-          roleId: req.body.roleId,
-          universityId: req.body.universityId
+          roleId: 2,
+          universityId: req.body.universityId || null
         };
 
         // Save User in the database
