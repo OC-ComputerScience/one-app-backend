@@ -1,20 +1,20 @@
 module.exports = (app) => {
     const pageGroup = require("../controllers/pageGroup.controller.js");
-    const { authenticate } = require("../authentication/authentication.js");
+    const { authenticateRoute } = require("../authentication/authentication.js");
     var router = require("express").Router();
   
     // Create a new pageGroup
-    router.post("/", [authenticate], pageGroup.create);
+    router.post("/", [authenticateRoute], pageGroup.create);
     // Retrieve all pageGroups
-    router.get("/", [authenticate], pageGroup.findAll);
+    router.get("/", [authenticateRoute], pageGroup.findAll);
     // Retrieve a single pageGroup with id
-    router.get("/:id", [authenticate], pageGroup.findById);
+    router.get("/:id", [authenticateRoute], pageGroup.findById);
     // Update a pageGroup with id
-    router.put("/:id", [authenticate], pageGroup.update);
+    router.put("/:id", [authenticateRoute], pageGroup.update);
     // Delete a pageGroup with id
-    router.delete("/:id", [authenticate], pageGroup.delete);
+    router.delete("/:id", [authenticateRoute], pageGroup.delete);
     // Delete all pageGroups
-    router.delete("/", [authenticate], pageGroup.deleteAll);
+    router.delete("/", [authenticateRoute], pageGroup.deleteAll);
   
     app.use("/oneapp-api/pageGroups", router);
   };

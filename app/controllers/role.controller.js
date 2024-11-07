@@ -52,7 +52,9 @@ exports.findAll = (req, res) => {
 
 // Retrieve a(n) role by id
 exports.findById = (req, res) => {
+  console.log('retrieving role')
   const id = req.params.id;
+  console.log(id)
   Role.findByPk(id)
     .then((data) => {
       if (data) {

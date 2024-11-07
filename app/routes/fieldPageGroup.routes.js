@@ -1,20 +1,20 @@
 module.exports = (app) => {
     const fieldPageGroup = require("../controllers/fieldPageGroup.controller.js");
-    const { authenticate } = require("../authentication/authentication.js");
+    const { authenticateRoute } = require("../authentication/authentication.js");
     var router = require("express").Router();
   
     // Create a new Field Page Group
-    router.post("/", [authenticate], fieldPageGroup.create);
+    router.post("/", [authenticateRoute], fieldPageGroup.create);
     // Retrieve all Field Page Groups
-    router.get("/", [authenticate], fieldPageGroup.findAll);
+    router.get("/", [authenticateRoute], fieldPageGroup.findAll);
     // Retrieve a single Field Page Group with id
-    router.get("/:id", [authenticate], fieldPageGroup.findById);
+    router.get("/:id", [authenticateRoute], fieldPageGroup.findById);
     // Update a Field Page Group with id
-    router.put("/:id", [authenticate], fieldPageGroup.update);
+    router.put("/:id", [authenticateRoute], fieldPageGroup.update);
     // Delete a Field Page Group with id
-    router.delete("/:id", [authenticate], fieldPageGroup.delete);
+    router.delete("/:id", [authenticateRoute], fieldPageGroup.delete);
     // Delete all Field Page Groups
-    router.delete("/", [authenticate], fieldPageGroup.deleteAll);
+    router.delete("/", [authenticateRoute], fieldPageGroup.deleteAll);
   
     app.use("/oneapp-api/fieldPageGroups", router);
   };

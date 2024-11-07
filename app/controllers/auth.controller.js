@@ -1,5 +1,5 @@
 const db = require("../models");
-const { authenticate } = require("../authentication/authentication");
+const { authenticateRoute } = require("../authentication/authentication");
 const User = db.user;
 const Session = db.session;
 const Op = db.Sequelize.Op;

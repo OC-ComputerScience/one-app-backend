@@ -138,6 +138,8 @@ exports.findByEmail = (req, res) => {
     where: {
       email: email,
     },
+    include: [db.role]
+    
   })
     .then((data) => {
       if (data) {
