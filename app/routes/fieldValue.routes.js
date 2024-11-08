@@ -1,20 +1,20 @@
 module.exports = (app) => {
     const fieldValue = require("../controllers/fieldValue.controller.js");
-    const { authenticate } = require("../authentication/authentication.js");
+    const { authenticateRoute } = require("../authentication/authentication.js");
     var router = require("express").Router();
   
     // Create a new fieldValue
-    router.post("/", [authenticate], fieldValue.create);
+    router.post("/", [authenticateRoute], fieldValue.create);
     // Retrieve all fieldValues
-    router.get("/", [authenticate], fieldValue.findAll);
+    router.get("/", [authenticateRoute], fieldValue.findAll);
     // Retrieve a single fieldValue with id
-    router.get("/:id", [authenticate], fieldValue.findById);
+    router.get("/:id", [authenticateRoute], fieldValue.findById);
     // Update a fieldValue with id
-    router.put("/:id", [authenticate], fieldValue.update);
+    router.put("/:id", [authenticateRoute], fieldValue.update);
     // Delete a fieldValue with id
-    router.delete("/:id", [authenticate], fieldValue.delete);
+    router.delete("/:id", [authenticateRoute], fieldValue.delete);
     // Delete all fieldValues
-    router.delete("/", [authenticate], fieldValue.deleteAll);
+    router.delete("/", [authenticateRoute], fieldValue.deleteAll);
   
     app.use("/oneapp-api/fieldValues", router);
   };

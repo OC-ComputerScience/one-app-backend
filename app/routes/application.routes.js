@@ -1,20 +1,20 @@
 module.exports = (app) => {
     const application = require("../controllers/application.controller.js");
-    const { authenticate } = require("../authentication/authentication.js");
+    const { authenticateRoute } = require("../authentication/authentication.js");
     var router = require("express").Router();
   
     // Create a new application
-    router.post("/", [authenticate], application.create);
+    router.post("/", [authenticateRoute], application.create);
     // Retrieve all applications
-    router.get("/", [authenticate], application.findAll);
+    router.get("/", [authenticateRoute], application.findAll);
     // Retrieve a single application with id
-    router.get("/:id", [authenticate], application.findById);
+    router.get("/:id", [authenticateRoute], application.findById);
     // Update a application with id
-    router.put("/:id", [authenticate], application.update);
+    router.put("/:id", [authenticateRoute], application.update);
     // Delete a application with id
-    router.delete("/:id", [authenticate], application.delete);
+    router.delete("/:id", [authenticateRoute], application.delete);
     // Delete all applications
-    router.delete("/", [authenticate], application.deleteAll);
+    router.delete("/", [authenticateRoute], application.deleteAll);
   
     app.use("/oneapp-api/applications", router);
   };
