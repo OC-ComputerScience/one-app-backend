@@ -64,6 +64,20 @@ exports.findById = (req, res) => {
     });
 };
 
+exports.findAllByField = async(req, res) => {
+  const fieldId = req.params.fieldId;
+
+  try{
+    const data = await FieldValue.findAll({where: {fieldId: fieldId}})
+    res.send(data)
+  }
+  catch(err){
+    res.status(500).send({
+      message: err.message || "Error retrieving FieldValue with id=" + id,
+    });
+  }
+}
+
 // Update a FieldValue by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

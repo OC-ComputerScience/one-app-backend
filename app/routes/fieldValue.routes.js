@@ -9,6 +9,8 @@ module.exports = (app) => {
     router.get("/", [authenticateRoute], fieldValue.findAll);
     // Retrieve a single fieldValue with id
     router.get("/:id", [authenticateRoute], fieldValue.findById);
+
+    router.get("/field/:fieldId", [authenticateRoute], fieldValue.findAllByField);
     // Update a fieldValue with id
     router.put("/:id", [authenticateRoute], fieldValue.update);
     // Delete a fieldValue with id
