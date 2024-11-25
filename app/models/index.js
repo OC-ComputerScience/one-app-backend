@@ -106,7 +106,7 @@ db.fieldPageGroup.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-db.page.hasMany(
+db.pageGroup.hasMany(
   db.fieldPageGroup,
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );

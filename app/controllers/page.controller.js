@@ -34,7 +34,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all pages from the database
-exports.findAll = (req, res) => {
+exports.findAll = async(req, res) => {
   const sortVar = req.query.sortVar;
   var order = [];
 
@@ -42,17 +42,45 @@ exports.findAll = (req, res) => {
     order.push([sortVar, req.query.order]);
   }
 
-  Page.findAll({
-    order: order,
-  })
-    .then((data) => {
-      res.send(data);
+  try{
+    const data = await Page.findAll({
+      order: order,
+      include: [{
+        model: db.pageGroup,
+        include: [{
+          model: db.fieldPageGroup,
+          required: false,
+          include: [db.field]
+        }]
+      }]
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving pages.",
-      });
+
+    if(data){
+      res.send(data)
+    }
+    else {
+      res.status(404).send({
+        message: "Cannot find pages"
+      })
+    }
+  }
+  catch(err){
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving pages.",
     });
+  }
+
+  // Page.findAll({
+  //   order: order,
+  // })
+  //   .then((data) => {
+  //     res.send(data);
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).send({
+  //       message: err.message || "Some error occurred while retrieving pages.",
+  //     });
+  //   });
 };
 
 // Retrieve a(n) page by id

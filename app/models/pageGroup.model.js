@@ -26,7 +26,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       displayType: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       }
     });

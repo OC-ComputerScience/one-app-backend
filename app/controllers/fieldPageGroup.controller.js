@@ -5,6 +5,7 @@ const FieldPageGroup = db.fieldPageGroup;
 // Create and Save a new Field Page Group
 exports.create = (req, res) => {
   // Validate request
+  console.log(req.body);
   if (req.body.fieldId === undefined) {
     const error = new Error("FieldPageGroup id cannot be empty for field page group!");
     error.statusCode = 400;
@@ -22,7 +23,8 @@ exports.create = (req, res) => {
   const fieldPageGroup = {
     fieldId: req.body.fieldId,
     pageId: req.body.pageId,
-    sequenceNumber: req.body.sequenceNumber
+    sequenceNumber: req.body.sequenceNumber,
+    pageGroupId: req.body.pageGroupId
   };
 
   // Create and Save a new fieldPageGroup
