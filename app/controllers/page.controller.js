@@ -103,6 +103,64 @@ exports.findById = (req, res) => {
     });
 };
 
+exports.findByUserId = async(req, res) => {
+  const userId = req.params.userId
+
+  try {
+    const pages = await Page.findAll({ 
+      order: [['pageSequence', 'ASC']],
+      include: [{
+        model: db.pageGroup,
+        order: [['groupSequence', 'ASC']],
+        include: [{
+          model: db.fieldPageGroup,
+          order: [['sequenceNumber', 'ASC']],
+          required: false,
+          include: [{
+            model: db.field,
+            order: [['fieldSequence', 'ASC']],
+            include: [
+              {
+                model: db.appFieldValue,
+                required: false,
+              },
+              {
+                model: db.fieldValue,
+                required: false,
+              }
+            ]
+          }]
+        }]
+      }]
+    })
+
+    const processedPages = pages.map(page => {
+      const processedPage = page.toJSON()
+      processedPage.pageGroups = (page.pageGroups || []).map(pageGroup => {
+        const maxGroups = (pageGroup.fieldPageGroups || []).reduce((max, fpg) => {
+          if (!fpg || !fpg.field) return max
+          const fieldMax = (fpg.field.appFieldValues || []).length
+          return Math.max(max, fieldMax)
+        }, 1)
+        return {
+          ...(pageGroup.toJSON() || {}),
+          numGroups: maxGroups
+        }
+      })
+      return processedPage
+    });
+
+    res.send(processedPages)
+  }
+  catch (err) {
+    console.error('Error in findByUserId:', err)
+    res.status(500).send({
+      message: "Error retrieving pages for user",
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
+    })
+  }
+}
+
 // Update a(n) page by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

@@ -64,6 +64,23 @@ exports.findById = (req, res) => {
     });
 };
 
+exports.findbyUserId = async (req, res) => {
+  const id = req.params.userId;
+
+  try {
+    const data = await Application.findAll({ 
+      where: { userId: id }
+    });
+    res.send(data);
+  }
+  catch (err) {
+    res.status(500).send({
+      message: err.message || "Error retrieving Application with user id=" + id,
+    });
+  }
+
+};
+
 // Update a Application by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

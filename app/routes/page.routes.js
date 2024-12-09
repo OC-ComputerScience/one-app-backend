@@ -9,6 +9,8 @@ module.exports = (app) => {
     router.get("/", [authenticateRoute], page.findAll);
     // Retrieve a single page with id
     router.get("/:id", [authenticateRoute], page.findById);
+
+    router.get("/user/:userId", [authenticateRoute], page.findByUserId);
     // Update a page with id
     router.put("/:id", [authenticateRoute], page.update);
     // Delete a page with id
