@@ -9,6 +9,8 @@ module.exports = (app) => {
     router.get("/", [authenticateRoute], application.findAll);
     // Retrieve a single application with id
     router.get("/:id", [authenticateRoute], application.findById);
+
+    router.get("/user/:userId", [authenticateRoute], application.findbyUserId);
     // Update a application with id
     router.put("/:id", [authenticateRoute], application.update);
     // Delete a application with id
