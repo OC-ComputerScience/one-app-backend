@@ -11,7 +11,7 @@ This application allows users to create and maintain a list of recipes that have
 1. Clone the project into your **XAMPP/xamppfiles/htdocs** directory.
 
 ```
-git clone https://github.com/OC-ComputerScience/recipe-backend.git
+git clone https://github.com/OC-ComputerScience/one-app-backend.git
 ```
 
 2. Install the project.

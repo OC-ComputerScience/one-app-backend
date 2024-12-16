@@ -1,25 +1,25 @@
 module.exports = (app) => {
-  const User = require("../controllers/user.controller.js");
+  const user = require("../controllers/user.controller.js");
   const { authenticateRoute } = require("../authentication/authentication");
   var router = require("express").Router();
 
   // Create a new User
-  router.post("/users/", User.create);
+  router.post("/", user.create);
 
   // Retrieve all Users
-  router.get("/users/", User.findAll);
+  router.get("/", [authenticateRoute], user.findAll);
 
   // Retrieve a single User with id
-  router.get("/users/:id", User.findOne);
+  router.get("/:id", user.findById);
 
   // Update a User with id
-  router.put("/users/:id", [authenticateRoute], User.update);
+  router.put("/:id", [authenticateRoute], user.update);
 
   // Delete a User with id
-  router.delete("/users/:id", [authenticateRoute], User.delete);
+  router.delete("/:id", [authenticateRoute], user.delete);
 
   // Delete all User
-  router.delete("/users/", [authenticateRoute], User.deleteAll);
+  router.delete("/", [authenticateRoute], user.deleteAll);
 
-  app.use("/recipeapi", router);
+  app.use("/oneapp-api/users", router);
 };
