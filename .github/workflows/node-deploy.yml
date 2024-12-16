@@ -1,11 +1,10 @@
-name: AWS DEPLOY TO STAGING
-# turn off deploy to AWS
+name: AWS DEPLOY TO PRODUCTION
 
 on:
   pull_request:
     types: [closed]
     branches:
-      - dev
+      - main
 
 jobs:
   aws-deploy:
@@ -18,10 +17,12 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
-          ref: dev
-      - uses: actions/setup-node@v1
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.11.0
       - run: npm install
 
       - run: |
@@ -33,7 +34,6 @@ jobs:
           echo SECRET_KEY = "$SECRET_KEY" >> .env
 
       - run: npm run bundle
-
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.1
         env:
