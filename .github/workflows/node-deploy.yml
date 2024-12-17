@@ -10,10 +10,10 @@ jobs:
   aws-deploy:
     runs-on: ubuntu-latest
     env:
-      DB_HOST: ${{ secrets.AWS_DB_HOST }}
-      DB_PW: ${{ secrets.AWS_DB_PW}}
-      DB_USER: ${{ secrets.AWS_DB_USER }}
-      DB_NAME: ${{ secrets.AWS_DB_NAME }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PW: ${{ secrets.DB_PW}}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_NAME: ${{ secrets.DB_NAME }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
     steps:
