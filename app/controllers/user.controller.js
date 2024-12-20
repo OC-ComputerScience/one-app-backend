@@ -98,7 +98,7 @@ exports.findAll = (req, res) => {
   const id = req.query.id;
   var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
 
-  User.findAll({ where: condition })
+  User.findAll({ where: condition, include: [db.role] })
     .then((data) => {
       res.send(data);
     })
