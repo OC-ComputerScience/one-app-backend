@@ -6,7 +6,7 @@ const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
   // Validate request
   if (req.body.name === undefined) {
-    const error = new Error("Name id cannot be empty for university!");
+    const error = new Error("Name cannot be empty for university!");
     error.statusCode = 400;
     throw error;
   } else if (req.body.status === undefined) {
@@ -18,6 +18,7 @@ exports.create = (req, res) => {
   // Create a University
   const university = {
     name: req.body.name,
+    abrev: req.body.abrev,
     city: req.body.city,
     state: req.body.state,
     url: req.body.url,
