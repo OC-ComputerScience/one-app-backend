@@ -10,6 +10,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      abrev: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       city: {
         type: Sequelize.STRING
       },
