@@ -1,6 +1,7 @@
 const db = require("../models");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const Page = db.page;
+const Application= db.application;
 
 // Create and Save a new page
 exports.create = (req, res) => {
@@ -104,7 +105,10 @@ exports.findById = (req, res) => {
 };
 
 exports.findByUserId = async(req, res) => {
-  const userId = req.params.userId
+
+  const userId = req.params.userId;
+  var appId;
+  await Application.findAll({where: [{userId:userId}]}).then((data) => { appId = data[0].id; });
 
   try {
     const pages = await Page.findAll({ 
@@ -123,6 +127,7 @@ exports.findByUserId = async(req, res) => {
               {
                 model: db.appFieldValue,
                 required: false,
+                where: {applicationId: appId}
               },
               {
                 model: db.fieldValue,
