@@ -40,6 +40,7 @@ require("./app/routes/role.routes")(app);
 require("./app/routes/university.routes")(app);
 require("./app/routes/userUniversity.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/form.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;

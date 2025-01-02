@@ -14,12 +14,17 @@ exports.create = (req, res) => {
     const error = new Error("Page sequence cannot be empty for page!");
     error.statusCode = 400;
     throw error;
+  } else if (req.body.formId === undefined) {
+    const error = new Error("Page formId cannot be empty for page!");
+    error.statusCode = 400;
+    throw error;
   }
 
   const page = {
     title: req.body.title,
     text: req.body.text,
-    pageSequence: req.body.pageSequence
+    pageSequence: req.body.pageSequence,
+    formId: req.body.formId,
   };
 
   // Create and Save a new page
@@ -36,6 +41,7 @@ exports.create = (req, res) => {
 
 // Retrieve all pages from the database
 exports.findAll = async(req, res) => {
+  let formId = req.params.formId;
   const sortVar = req.query.sortVar;
   var order = [];
 
@@ -46,6 +52,7 @@ exports.findAll = async(req, res) => {
   try{
     const data = await Page.findAll({
       order: order,
+      where: formId ? {formId: formId} : {},
       include: [{
         model: db.pageGroup,
         include: [{
@@ -70,19 +77,8 @@ exports.findAll = async(req, res) => {
       message: err.message || "Some error occurred while retrieving pages.",
     });
   }
-
-  // Page.findAll({
-  //   order: order,
-  // })
-  //   .then((data) => {
-  //     res.send(data);
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).send({
-  //       message: err.message || "Some error occurred while retrieving pages.",
-  //     });
-  //   });
 };
+
 
 // Retrieve a(n) page by id
 exports.findById = (req, res) => {
@@ -107,12 +103,14 @@ exports.findById = (req, res) => {
 exports.findByUserId = async(req, res) => {
 
   const userId = req.params.userId;
+  const formId = req.params.formId;
   var appId;
   await Application.findAll({where: [{userId:userId}]}).then((data) => { appId = data[0].id; });
 
   try {
     const pages = await Page.findAll({ 
       order: [['pageSequence', 'ASC']],
+      where: [{formId: formId}] ,
       include: [{
         model: db.pageGroup,
         order: [['groupSequence', 'ASC']],

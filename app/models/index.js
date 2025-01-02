@@ -20,6 +20,7 @@ db.downloadLog = require("./downloadLog.model.js")(sequelize, Sequelize);
 db.field = require("./field.model.js")(sequelize, Sequelize);
 db.fieldPageGroup = require("./fieldPageGroup.model.js")(sequelize, Sequelize);
 db.fieldValue = require("./fieldValue.model.js")(sequelize, Sequelize);
+db.form = require("./form.model.js")(sequelize, Sequelize);
 db.page = require("./page.model.js")(sequelize, Sequelize);
 db.pageGroup = require("./pageGroup.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
@@ -27,6 +28,7 @@ db.session = require("./session.model.js")(sequelize, Sequelize);
 db.university = require("./university.model.js")(sequelize, Sequelize);
 db.userUniversity = require("./userUniversity.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
+
 
 
 // foreign key for app field value
@@ -66,6 +68,8 @@ db.application.belongsTo(
   db.user,
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+
+
 
 // foreign key for download log
 db.university.hasMany(
@@ -125,6 +129,23 @@ db.pageGroup.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
+// foreign key for form 
+db.form.hasMany(
+  db.page,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.page.belongsTo(
+  db.form,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.form.hasMany(
+  db.application,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.application.belongsTo(
+  db.form,
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
 // foreign key for session
 db.user.hasMany(
   db.session,
