@@ -13,12 +13,17 @@ exports.create = (req, res) => {
     const error = new Error("Status cannot be empty for application!");
     error.statusCode = 400;
     throw error;
-  }
+  } else if (req.body.formId === undefined) {
+    const error = new Error("FormId cannot be empty for application!");
+    error.statusCode = 400;
+    throw error;
+}
 
   // Create a Application
   const application = {
     status: req.body.status,
-    userId: req.body.userId
+    userId: req.body.userId,
+    formId: req.body.formId,
   };
   // Save Application in the database
   Application.create(application)
