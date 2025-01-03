@@ -163,11 +163,12 @@ exports.findAllbyFormDate = async(req, res) => {
   console.log("formId", formId)
  try {
   const applications= await Application.findAll(
-    {where: [Op.and]
-      [
-        {formId:formId},
-        {updateAt: {[Op.gt]:  date}}
-      ],
+    {where: {
+      
+        formId: {[Op.eq]: formId},
+        updatedAt: {[Op.gt]:  date},
+        status: {[Op.eq]: "submitted"},
+        },
     include: [{
       model: db.form,
       include: [{
