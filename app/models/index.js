@@ -69,6 +69,14 @@ db.application.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
+db.application.hasMany(
+  db.page,
+  { foreignKey: 'formId' , constraints: false }
+);
+db.page.belongsTo(
+  db.application,
+  { foreignKey: 'formId', tarketKet: 'formId', constraints: false } 
+);
 
 
 // foreign key for download log
