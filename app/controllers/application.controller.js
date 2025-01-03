@@ -1,6 +1,8 @@
 const db = require("../models");
 const Application = db.application;
+const Page = db.page;
 const Op = db.Sequelize.Op;
+
 
 // Create and Save a new Application
 exports.create = (req, res) => {
@@ -152,3 +154,86 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+
+exports.findAllbyFormDate = async(req, res) => {
+
+  const date = new Date (req.params.date);
+  const formId = req.params.formId;
+  console.log("date", date)
+  console.log("formId", formId)
+ try {
+  const applications= await Application.findAll(
+    {where: {
+      
+        formId: {[Op.eq]: formId},
+        updatedAt: {[Op.gt]:  date},
+        status: {[Op.eq]: "submitted"},
+        },
+    include: [{
+      model: db.form,
+      include: [{
+        model: db.page,
+        order: [['pageSequence', 'ASC']],
+        include: [{
+          model: db.pageGroup,
+          order: [['groupSequence', 'ASC']],
+          include: [{
+            model: db.fieldPageGroup,
+            order: [['sequenceNumber', 'ASC']],
+            required: false,
+            include: [{
+              model: db.field,
+              order: [['fieldSequence', 'ASC']],
+              include: [
+                {
+                  model: db.appFieldValue,
+                  order: [['setNumber', 'ASC']],
+                  where: [{applicationId: {[Op.eq]: db.sequelize.col('application.id')} }],
+                  required: false,
+                  
+                },
+                {
+                  model: db.fieldValue,
+                  required: false,
+                }
+              ]
+            }]
+          }]
+        }]
+      }]
+    }]
+  })
+    
+    applications.forEach(application => {
+      let newPages = processPages(application.form.pages)
+      application.pages = newPages
+
+    })
+    res.send(applications)
+  }
+  catch (err) {
+    console.log("error", err.message) 
+    res.status(500).send({
+      message: "Error retrieving/processing  applicaitons and pages"+ err.message,
+   
+    })
+  }
+}
+
+const processPages = ((pages) => {
+  const processedPages = pages.map(page => {
+    const processedPage = page.toJSON()
+    processedPage.pageGroups = (page.pageGroups || []).map(pageGroup => {
+      const maxGroups = (pageGroup.fieldPageGroups || []).reduce((max, fpg) => {
+        if (!fpg || !fpg.field) return max
+        const fieldMax = (fpg.field.appFieldValues || []).length
+        return Math.max(max, fieldMax)
+      }, 1)
+      return {
+        ...(pageGroup.toJSON() || {}),
+        numGroups: maxGroups
+      }
+    })
+    return processedPage
+  })
+})
