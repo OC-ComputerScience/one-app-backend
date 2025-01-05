@@ -23,6 +23,43 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    phone: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    streetAddress: {  
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    city: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    state: {    
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    zip: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    congregation: { 
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    howHeard: { 
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    status: {
+      type: Sequelize.ENUM("active", "inactive"),
+      allowNull: false,
+      defaultValue: "inactive",
+    },
+    resetCode: { 
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     password: {
       type: Sequelize.BLOB,
       allowNull: false,
@@ -31,7 +68,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BLOB,
       allowNull: false,
     },
-  });
+  })
 
   return User;
 };

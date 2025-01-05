@@ -7,7 +7,7 @@ module.exports = (app) => {
   router.post("/", [authenticateRoute], university.create);
 
   // Retrieve all UserUniversity
-  router.get("/", [authenticateRoute], university.findAll);
+  router.get("/", university.findAll);
 
   // Retrieve a single UserUniversity with universityId
   router.get("/:id", [authenticateRoute], university.findById);

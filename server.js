@@ -7,6 +7,7 @@ const app = express();
 
 const db = require("./app/models");
 
+// add and update columns in the database if they have changed
 db.sequelize.sync({ force: false });
 
 var corsOptions = {
