@@ -39,7 +39,7 @@ exports.create = async (req, res) => {
 
         let salt = await getSalt();
         let hash = await hashPassword(req.body.password, salt);
-
+      
         // Create a User
         const user = {
           firstName: req.body.firstName,
@@ -58,9 +58,10 @@ exports.create = async (req, res) => {
           password: hash,
           salt: salt,
           roleId: req.body.roleId ,
-          universityId: req.body.universityId || null
+          universityId: req.body.universityId || null,
+          hsgradyear: req.body.hsgradyear || null,
         };
-
+        console.log("user: ", user);  
 
         // Save User in the database
         await User.create(user)
