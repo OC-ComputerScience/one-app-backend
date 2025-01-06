@@ -39,18 +39,29 @@ exports.create = async (req, res) => {
 
         let salt = await getSalt();
         let hash = await hashPassword(req.body.password, salt);
-
+      
         // Create a User
         const user = {
           firstName: req.body.firstName,
           middleName: req.body.middleName,
           lastName: req.body.lastName,
           email: req.body.email,
+          phone: req.body.phone || null,
+          streetAddress: req.body.streetAddress || null,
+          city: req.body.city || null,
+          state: req.body.state || null,
+          zip: req.body.zip || null,
+          congregation: req.body.congregation || null,
+          howHeard: req.body.howHeard || null,
+          status: req.body.status || "inactive",
+          resetCode: req.body.resetCode || null,
           password: hash,
           salt: salt,
-          roleId: 2,
-          universityId: req.body.universityId || null
+          roleId: req.body.roleId ,
+          universityId: req.body.universityId || null,
+          hsgradyear: req.body.hsgradyear || null,
         };
+        console.log("user: ", user);  
 
         // Save User in the database
         await User.create(user)

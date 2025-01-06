@@ -32,6 +32,7 @@ exports.login = async (req, res) => {
         roleId: user.roleId,
         id: user.id,
         token: token,
+        status: user.status,
       };
       res.send(userInfo);
     });
@@ -49,10 +50,15 @@ exports.logout = async (req, res) => {
     let token = auth.slice(7);
     let sessionId = await decrypt(token);
     if (sessionId == null) return;
-    return await Session.destroy({ where: { id: sessionId } }).catch(
+    await Session.destroy({ where: { id: sessionId } }).catch(
       (error) => {
         console.log(error);
+        res.status(500).send({
+          message:
+            error.message || "Some error occurred while logging out.",
+        });
       }
     );
+    res.send({ message: "Logged out successfully." });
   }
 };
