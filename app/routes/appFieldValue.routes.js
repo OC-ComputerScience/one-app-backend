@@ -13,6 +13,8 @@ module.exports = (app) => {
     router.put("/:id", [authenticateRoute], appFieldValue.update);
     // Delete a appFieldValue with id
     router.delete("/:id", [authenticateRoute], appFieldValue.delete);
+    // Delete a appFieldValue with id
+    router.delete("/:fieldId/app/:applicationId/set/:setNumber", [authenticateRoute], appFieldValue.deleteFieldValuesForAppSet);
     // Delete all appFieldValues
     router.delete("/", [authenticateRoute], appFieldValue.deleteAll);
   

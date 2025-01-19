@@ -116,6 +116,28 @@ exports.delete = (req, res) => {
       });
     });
 };
+// Delete a AppFieldValue with the specified id in the request
+exports.deleteFieldValuesForAppSet = (req, res) => {
+  const id = req.params.id;
+  const fieldId = req.params.fieldId;
+  const applicationId = req.params. applicationId;
+  const setNumber = req.params.setNumber;
+
+  AppFieldValue.destroy({
+    where: { fieldId: fieldId, applicationId: applicationId, setNumber: setNumber },
+  })
+    .then(() => {
+        res.send({
+          message: "AppFieldValues were deleted successfully!",
+        });
+
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Could not delete AppFieldValue with id=" + fieldId,
+      });
+    });
+};
 
 // Delete all App Field Values from the database.
 exports.deleteAll = (req, res) => {
