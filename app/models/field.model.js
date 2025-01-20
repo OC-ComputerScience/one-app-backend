@@ -31,6 +31,14 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
+      isEncrypted: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      defaultField: {
+        type: Sequelize.String,
+        allowNull: true,
+      },
     });
   
     return Field;
