@@ -48,7 +48,7 @@ jobs:
         env:
           NAME: "Root"
         with:
-          hosts: "oneapp.chefscholars.org/"
+          hosts: "ubuntu@oneapp.chefscholars.org/"
           privateKey: ${{ secrets.SERVER_SSH_KEY }}
           debug: false
           command: |
