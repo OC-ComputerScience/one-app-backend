@@ -36,7 +36,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       defaultField: {
-        type: Sequelize.String,
+        type: Sequelize.STRING,
         allowNull: true,
       },
     });
