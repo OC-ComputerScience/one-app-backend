@@ -42,7 +42,7 @@ jobs:
           SOURCE: "deploy/"
           REMOTE_HOST: "oneapp.chefscholars.org/"
           REMOTE_USER: ubuntu
-          TARGET: "nodeapps/one-app-backend"
+          TARGET: "/nodeapps/one-app-backend"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
