@@ -22,7 +22,9 @@ exports.create = (req, res) => {
     type: req.body.type,
     placeholderText: req.body.placeholderText,
     fieldSequence: req.body.fieldSequence,
-    isRequired: req.body.isRequired
+    isRequired: req.body.isRequired,
+    isEncrypted: req.body.isEncrypted,
+    defaultField: req.body.defaultField,
   };
 
   // Create and Save a new field
