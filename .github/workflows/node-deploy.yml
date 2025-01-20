@@ -40,7 +40,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
           REMOTE_HOST: "oneapp.chefscholars.org"
           REMOTE_USER: ubuntu
-          TARGET: "/nodeapps/one-app-backend"
+          TARGET: "nodeapps/one-app-backend"
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "deploy/" 
       - name: Execute SSH commmands on remote server
