@@ -7,13 +7,13 @@ module.exports = (app) => {
   router.post("/", [authenticateRoute,isAdmin], form.create);
 
   // Retrieve all UserForm
-  router.get("/", [authenticateRoute], form.findAll);
+  router.get("/", [authenticateRoute,isAdmin], form.findAll);
 
     // Retrieve main UserForm
     router.get("/main", [authenticateRoute], form.findMain);
 
   // Retrieve a single UserForm with formId
-  router.get("/:id", [authenticateRoute], form.findById);
+  router.get("/:id", [authenticateRoute,isAdmin], form.findById);
 
   // Update an UserForm with formId
   router.put("/:id", [authenticateRoute,isAdmin], form.update);
