@@ -129,10 +129,161 @@ authenticateRoute = async (req, res, next) => {
     });
   }
 };
+authenticateRoute = async (req, res, next) => {
+  let auth = req.get("authorization");
+  console.log(auth);
+  if (auth != null) {
+    if (
+      auth.startsWith("Bearer ") &&
+      (typeof require !== "string" || require === "token")
+    ) {
+      let token = auth.slice(7);
+      let sessionId = await decrypt(token);
+      let session = {};
+      await Session.findAll({ where: { id: sessionId } })
+        .then((data) => {
+          session = data[0];
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      if (session != null) {
+        console.log(session >= Date.now());
+        console.log(Date.now());
+        if (session.expirationDate >= Date.now()) {
+          next();
+          return;
+        } else {
+          return res.status(401).send({
+            message: "Unauthorized! Expired Token, Logout and Login again",
+          });
+        }
+      } else {
+        return res.status(401).send({
+          message: "Unauthorized! Expired Token, Logout and Login again",
+        });
+      }
+    }
+  } else {
+    return res.status(401).send({
+      message: "Unauthorized! No Auth Header",
+    });
+  }
+};
+
+isAdmin = async (req, res, next) => {
+  let auth = req.get("authorization");
+ 
+  if (auth != null) {
+    if (
+      auth.startsWith("Bearer ") &&
+      (typeof require !== "string" || require === "token")
+    ) {
+      let token = auth.slice(7);
+      let sessionId = await decrypt(token);
+      let session = {};
+      await Session.findAll({ where: { id: sessionId } })
+        .then((data) => {
+          session = data[0];
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      if (session != null) {
+        let user = {};
+        if (session.expirationDate >= Date.now()) {
+          await User.findAll({ where: { id: session.userId } })
+          .then((data) => { 
+            user = data[0];})
+          .catch((error) => {
+            console.log(error);
+          })
+          if(user.roleId==1 && user.status=="active"){
+              next();
+              return;
+          }
+            else {
+              return res.status(401).send({
+                message: "Unauthorized! Not an Admin",
+              });
+            }
+        } else {
+          return res.status(401).send({
+            message: "Unauthorized! Expired Token, Logout and Login again",
+          });
+        }
+      } else {
+        return res.status(401).send({
+          message: "Unauthorized! Expired Token, Logout and Login again",
+        });
+      }
+    }
+  } else {
+    return res.status(401).send({
+      message: "Unauthorized! No Auth Header",
+    });
+  }
+};
+
+isAdminOrUniversity = async (req, res, next) => {
+  let auth = req.get("authorization");
+ 
+  if (auth != null) {
+    if (
+      auth.startsWith("Bearer ") &&
+      (typeof require !== "string" || require === "token")
+    ) {
+      let token = auth.slice(7);
+      let sessionId = await decrypt(token);
+      let session = {};
+      await Session.findAll({ where: { id: sessionId } })
+        .then((data) => {
+          session = data[0];
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      if (session != null) {
+        let user = {};
+        if (session.expirationDate >= Date.now()) {
+          await User.findAll({ where: { id: session.userId } })
+          .then((data) => { 
+            user = data[0];})
+          .catch((error) => {
+            console.log(error);
+          })
+          if((user.roleId ==1 || user.roleId ==3) && user.status=="active"){
+              next();
+              return;
+          }
+            else {
+              return res.status(401).send({
+                message: "Unauthorized! Not an Admin or Tutor",
+              });
+            }
+        } else {
+          return res.status(401).send({
+            message: "Unauthorized! Expired Token, Logout and Login again",
+          });
+        }
+      } else {
+        return res.status(401).send({
+          message: "Unauthorized! Expired Token, Logout and Login again",
+        });
+      }
+    }
+  } else {
+    return res.status(401).send({
+      message: "Unauthorized! No Auth Header",
+    });
+  }
+};
 
 const auth = {
   authenticate: authenticate,
   authenticateRoute: authenticateRoute,
+  isAdmin: isAdmin,
+  isAdminOrUniversity: isAdminOrUniversity
 };
 
 module.exports = auth;

@@ -4,17 +4,17 @@ module.exports = (app) => {
     var router = require("express").Router();
   
     // Create a new Field Page Group
-    router.post("/", [authenticateRoute], fieldPageGroup.create);
+    router.post("/", [authenticateRoute,isAdmin], fieldPageGroup.create);
     // Retrieve all Field Page Groups
     router.get("/", [authenticateRoute], fieldPageGroup.findAll);
     // Retrieve a single Field Page Group with id
     router.get("/:id", [authenticateRoute], fieldPageGroup.findById);
     // Update a Field Page Group with id
-    router.put("/:id", [authenticateRoute], fieldPageGroup.update);
+    router.put("/:id", [authenticateRoute,isAdmin], fieldPageGroup.update);
     // Delete a Field Page Group with id
-    router.delete("/:id", [authenticateRoute], fieldPageGroup.delete);
-    // Delete all Field Page Groups
-    router.delete("/", [authenticateRoute], fieldPageGroup.deleteAll);
+    router.delete("/:id", [authenticateRoute],isAdmin, fieldPageGroup.delete);
+ 
+
   
     app.use("/oneapp-api/fieldPageGroups", router);
   };

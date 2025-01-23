@@ -53,7 +53,7 @@ exports.create = async (req, res) => {
           zip: req.body.zip || null,
           congregation: req.body.congregation || null,
           howHeard: req.body.howHeard || null,
-          status: req.body.status || "inactive",
+          status: "inactive",
           resetCode: req.body.resetCode || null,
           password: hash,
           salt: salt,
@@ -61,7 +61,7 @@ exports.create = async (req, res) => {
           universityId: req.body.universityId || null,
           hsgradyear: req.body.hsgradyear || null,
         };
-        console.log("user: ", user);  
+       if (user.roleId == 2) user.status = "active";
 
         // Save User in the database
         await User.create(user)
