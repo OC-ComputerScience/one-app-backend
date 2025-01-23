@@ -1,6 +1,6 @@
 module.exports = (app) => {
     const appFieldValue = require("../controllers/appFieldValue.controller.js");
-    const { authenticateRoute } = require("../authentication/authentication.js");
+    const { authenticateRoute, isAdmin } = require("../authentication/authentication.js");
     var router = require("express").Router();
   
     // Create a new appFieldValue
@@ -15,8 +15,7 @@ module.exports = (app) => {
     router.delete("/:id", [authenticateRoute], appFieldValue.delete);
     // Delete a appFieldValue with id
     router.delete("/:fieldId/app/:applicationId/set/:setNumber", [authenticateRoute], appFieldValue.deleteFieldValuesForAppSet);
-    // Delete all appFieldValues
-    router.delete("/", [authenticateRoute], appFieldValue.deleteAll);
+
   
     app.use("/oneapp-api/appFieldValues", router);
   };
