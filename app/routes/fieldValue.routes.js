@@ -4,7 +4,7 @@ module.exports = (app) => {
     var router = require("express").Router();
   
     // Create a new fieldValue
-    router.post("/", [authenticateRoute], fieldValue.create);
+    router.post("/", [authenticateRoute,isAdmin], fieldValue.create);
     // Retrieve all fieldValues
     router.get("/", [authenticateRoute], fieldValue.findAll);
     // Retrieve a single fieldValue with id
@@ -12,11 +12,11 @@ module.exports = (app) => {
 
     router.get("/field/:fieldId", [authenticateRoute], fieldValue.findAllByField);
     // Update a fieldValue with id
-    router.put("/:id", [authenticateRoute], fieldValue.update);
+    router.put("/:id", [authenticateRoute,isAdmin], fieldValue.update);
     // Delete a fieldValue with id
-    router.delete("/:id", [authenticateRoute], fieldValue.delete);
+    router.delete("/:id", [authenticateRoute,isAdmin], fieldValue.delete);
     // Delete all fieldValues
-    router.delete("/", [authenticateRoute], fieldValue.deleteAll);
+    router.delete("/", [authenticateRoute,isAdmin], fieldValue.deleteAll);
   
     app.use("/oneapp-api/fieldValues", router);
   };

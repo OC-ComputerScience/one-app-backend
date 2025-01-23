@@ -19,8 +19,7 @@ module.exports = (app) => {
     router.put("/:id", [authenticateRoute], application.update);
     // Delete a application with id
     router.delete("/:id", [authenticateRoute], application.delete);
-    // Delete all applications
-    router.delete("/", [authenticateRoute], application.deleteAll);
+
   
     app.use("/oneapp-api/applications", router);
   };
