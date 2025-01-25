@@ -32,11 +32,13 @@ exports.create = async (req, res) => {
     },
   })
     .then(async (data) => {
+    
       if (data) {
-        return "This email is already in use.";
-      } else {
-        console.log("email not found");
-
+        res.status(422).send({message : "Email already exits."})
+      
+      
+      } else 
+      {
         let salt = await getSalt();
         let hash = await hashPassword(req.body.password, salt);
       
@@ -99,9 +101,7 @@ exports.create = async (req, res) => {
           });
       }
     })
-    .catch((err) => {
-      return err.message || "Error retrieving User with email=" + email;
-    });
+
 };
 
 // Retrieve all Users from the database.
