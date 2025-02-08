@@ -1,25 +1,22 @@
 module.exports = (app) => {
   const downloadLog = require("../controllers/downloadLog.controller.js");
   var router = require("express").Router();
-  const { authenticateRoute } = require("../authentication/authentication.js");
+  const { authenticateRoute,isAdmin,isAdminOrUniversity } = require("../authentication/authentication.js");
 
   // Create a new DownloadLog
-  router.post("/", [authenticateRoute], downloadLog.create);
+  router.post("/", [authenticateRoute,isAdminOrUniversity], downloadLog.create);
 
   // Retrieve all DownloadLog
-  router.get("/", [authenticateRoute], downloadLog.findAll);
+  router.get("/", [authenticateRoute,isAdmin], downloadLog.findAll);
 
   // Retrieve a single DownloadLog with downloadLogId
-  router.get("/:id", [authenticateRoute], downloadLog.findById);
+  router.get("/:id", [authenticateRoute,isAdmin], downloadLog.findById);
 
   // Update an DownloadLog with downloadLogId
-  router.put("/:id", [authenticateRoute], downloadLog.update);
+  router.put("/:id", [authenticateRoute,isAdmin], downloadLog.update);
 
   // Delete an DownloadLog with downloadLogId
-  router.delete("/:id", [authenticateRoute], downloadLog.delete);
-
-  // Create a new DownloadLog
-  router.delete("/", [authenticateRoute], downloadLog.deleteAll);
+  router.delete("/:id", [authenticateRoute,isAdmin], downloadLog.delete);
 
   app.use("/oneapp-api/downloadLogs", router);
 };

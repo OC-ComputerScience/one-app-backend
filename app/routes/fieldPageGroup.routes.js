@@ -1,6 +1,6 @@
 module.exports = (app) => {
     const fieldPageGroup = require("../controllers/fieldPageGroup.controller.js");
-    const { authenticateRoute } = require("../authentication/authentication.js");
+    const { authenticateRoute,isAdmin } = require("../authentication/authentication.js");
     var router = require("express").Router();
   
     // Create a new Field Page Group

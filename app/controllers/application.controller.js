@@ -72,7 +72,7 @@ exports.findById = (req, res) => {
 };
 
 exports.findbyUserId = async (req, res) => {
-  const id = req.params.userId;
+  const id = req.params.id;
 
   try {
     const data = await Application.findAll({ 
