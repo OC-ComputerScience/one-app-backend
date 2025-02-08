@@ -102,7 +102,7 @@ exports.findById = (req, res) => {
 
 exports.findByUserId = async(req, res) => {
 
-  const userId = req.params.userId;
+  const userId = req.params.id;
   const formId = req.params.formId;
   var appId;
   await Application.findAll({where: [{userId:userId}]}).then((data) => { appId = data[0].id; });

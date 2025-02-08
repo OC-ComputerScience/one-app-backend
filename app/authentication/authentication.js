@@ -1,6 +1,7 @@
 const db = require("../models");
 const { hashPassword } = require("./crypto");
 const Session = db.session;
+const Application = db.application;
 const User = db.user;
 
 /**
@@ -107,49 +108,7 @@ authenticateRoute = async (req, res, next) => {
           console.log(error);
         });
       if (session != null) {
-        console.log(session >= Date.now());
-        console.log(Date.now());
-        if (session.expirationDate >= Date.now()) {
-          next();
-          return;
-        } else {
-          return res.status(401).send({
-            message: "Unauthorized! Expired Token, Logout and Login again",
-          });
-        }
-      } else {
-        return res.status(401).send({
-          message: "Unauthorized! Expired Token, Logout and Login again",
-        });
-      }
-    }
-  } else {
-    return res.status(401).send({
-      message: "Unauthorized! No Auth Header",
-    });
-  }
-};
-authenticateRoute = async (req, res, next) => {
-  let auth = req.get("authorization");
-  console.log(auth);
-  if (auth != null) {
-    if (
-      auth.startsWith("Bearer ") &&
-      (typeof require !== "string" || require === "token")
-    ) {
-      let token = auth.slice(7);
-      let sessionId = await decrypt(token);
-      let session = {};
-      await Session.findAll({ where: { id: sessionId } })
-        .then((data) => {
-          session = data[0];
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      if (session != null) {
-        console.log(session >= Date.now());
-        console.log(Date.now());
+
         if (session.expirationDate >= Date.now()) {
           next();
           return;
@@ -225,6 +184,143 @@ isAdmin = async (req, res, next) => {
   }
 };
 
+isAdminOrId = async (req, res, next) => {
+  let auth = req.get("authorization");
+ 
+  if (auth != null) {
+    if (
+      auth.startsWith("Bearer ") &&
+      (typeof require !== "string" || require === "token")
+    ) {
+      let token = auth.slice(7);
+      let sessionId = await decrypt(token);
+      let session = {};
+      await Session.findAll({ where: { id: sessionId } })
+        .then((data) => {
+          session = data[0];
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      if (session != null) {
+        let user = {};
+        if (session.expirationDate >= Date.now()) {
+          await User.findAll({ where: { id: session.userId } })
+          .then((data) => { 
+            user = data[0];})
+          .catch((error) => {
+            console.log(error);
+          })
+
+          let userId = null;
+          if(req.params.id){
+            userId = req.params.id;}
+          else if(req.body.userId){
+            userId = req.body.userId;
+          }
+          
+          if((user.roleId==1 && user.status=="active") || (user.id == userId)){ 
+              next();
+              return;
+          }
+            else {
+              return res.status(401).send({
+                message: "Unauthorized! Not an Admin or same user id  ",
+              });
+            }
+        } else {
+          return res.status(401).send({
+            message: "Unauthorized! Expired Token, Logout and Login again",
+          });
+        }
+      } else {
+        return res.status(401).send({
+          message: "Unauthorized! Expired Token, Logout and Login again",
+        });
+      }
+    }
+  } else {
+    return res.status(401).send({
+      message: "Unauthorized! No Auth Header",
+    });
+  }
+};
+
+isAdminOrAppId = async (req, res, next) => {
+  let auth = req.get("authorization");
+ 
+  if (auth != null) {
+    if (
+      auth.startsWith("Bearer ") &&
+      (typeof require !== "string" || require === "token")
+    ) {
+      let token = auth.slice(7);
+      let sessionId = await decrypt(token);
+      let session = {};
+      await Session.findAll({ where: { id: sessionId } })
+        .then((data) => {
+          session = data[0];
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      if (session != null) {
+        let user = {};
+        if (session.expirationDate >= Date.now()) {
+          await User.findAll({ where: { id: session.userId } })
+          .then((data) => { 
+            user = data[0];})
+          .catch((error) => {
+            console.log(error);
+          })
+
+      
+
+          let appId = null;
+          if(req.body.applicationId){
+            appId = req.body.applicationId;
+          } else 
+          if(req.params.id)
+            {
+            appId = req.params.id;}
+         
+          console.log(req);
+          await Application.findAll({ where: { id: appId } })
+          .then((data) => { 
+            appData = data[0];})
+          .catch((error) => {
+            next()
+            return
+          })
+          console.log(appData);
+          if((user.roleId==1 && user.status=="active") || (user.id == appData.userId)){ 
+              next();
+              return;
+          }
+            else {
+              return res.status(401).send({
+                message: "Unauthorized! Not an Admin or same user id  ",
+              });
+            }
+        } else {
+          return res.status(401).send({
+            message: "Unauthorized! Expired Token, Logout and Login again",
+          });
+        }
+      } else {
+        return res.status(401).send({
+          message: "Unauthorized! Expired Token, Logout and Login again",
+        });
+      }
+    }
+  } else {
+    return res.status(401).send({
+      message: "Unauthorized! No Auth Header",
+    });
+  }
+};
+
+
 isAdminOrUniversity = async (req, res, next) => {
   let auth = req.get("authorization");
  
@@ -283,6 +379,8 @@ const auth = {
   authenticate: authenticate,
   authenticateRoute: authenticateRoute,
   isAdmin: isAdmin,
+  isAdminOrId: isAdminOrId,
+  isAdminOrAppId: isAdminOrAppId,
   isAdminOrUniversity: isAdminOrUniversity
 };
 
