@@ -12,7 +12,7 @@ const User = db.user;
  */
 authenticate = async (req, res, require = true) => {
   let auth = req.get("authorization");
-  console.log(auth);
+
   if (auth != null) {
     if (
       auth.startsWith("Basic ") &&
@@ -91,7 +91,7 @@ authenticate = async (req, res, require = true) => {
 
 authenticateRoute = async (req, res, next) => {
   let auth = req.get("authorization");
-  console.log(auth);
+
   if (auth != null) {
     if (
       auth.startsWith("Bearer ") &&
@@ -284,7 +284,7 @@ isAdminOrAppId = async (req, res, next) => {
             {
             appId = req.params.id;}
          
-          console.log(req);
+        
           await Application.findAll({ where: { id: appId } })
           .then((data) => { 
             appData = data[0];})
@@ -292,7 +292,7 @@ isAdminOrAppId = async (req, res, next) => {
             next()
             return
           })
-          console.log(appData);
+         
           if((user.roleId==1 && user.status=="active") || (user.id == appData.userId)){ 
               next();
               return;
