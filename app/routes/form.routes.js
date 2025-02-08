@@ -1,13 +1,13 @@
 module.exports = (app) => {
   const form = require("../controllers/form.controller.js");
   var router = require("express").Router();
-  const { authenticateRoute,isAdmin } = require("../authentication/authentication.js");
+  const { authenticateRoute,isAdmin,isAdminOrUniversity } = require("../authentication/authentication.js");
 
   // Create a new UserForm
   router.post("/", [authenticateRoute,isAdmin], form.create);
 
   // Retrieve all UserForm
-  router.get("/", [authenticateRoute], form.findAll);
+  router.get("/", [authenticateRoute,isAdminOrUniversity], form.findAll);
 
     // Retrieve main UserForm
     router.get("/main", [authenticateRoute], form.findMain);

@@ -32,11 +32,13 @@ exports.create = async (req, res) => {
     },
   })
     .then(async (data) => {
+    
       if (data) {
-        return "This email is already in use.";
-      } else {
-        console.log("email not found");
-
+        res.status(422).send({message : "Email already exits."})
+      
+      
+      } else 
+      {
         let salt = await getSalt();
         let hash = await hashPassword(req.body.password, salt);
       
@@ -99,9 +101,7 @@ exports.create = async (req, res) => {
           });
       }
     })
-    .catch((err) => {
-      return err.message || "Error retrieving User with email=" + email;
-    });
+
 };
 
 // Retrieve all Users from the database.
@@ -109,7 +109,13 @@ exports.findAll = (req, res) => {
   const id = req.query.id;
   var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
 
-  User.findAll({ where: condition, include: [db.role] })
+  User.findAll({ 
+    where: condition, include: [db.role],
+    attributes: ['id', 'email', 'lastName', 'firstName', 'roleId', 'streetAddress', 'city', 'state', 'zip', 'phone', 'congregation', 'status', 'universityId', 'hsgradyear', 'howHeard', 'resetCode'],
+ 
+  },
+ 
+  )
     .then((data) => {
       res.send(data);
     })
@@ -149,7 +155,9 @@ exports.findByEmail = (req, res) => {
     where: {
       email: email,
     },
-    include: [db.role]
+    include: [db.role],
+    attributes: ['id', 'email', 'lastName', 'firstName', 'roleId', 'streetAddress', 'city', 'state', 'zip', 'phone', 'congregation', 'status', 'universityId', 'hsgradyear', 'howHeard', 'resetCode'],
+ 
     
   })
     .then((data) => {
@@ -219,19 +227,4 @@ exports.delete = (req, res) => {
     });
 };
 
-// Delete all People from the database.
-exports.deleteAll = (req, res) => {
-  User.destroy({
-    where: {},
-    truncate: false,
-  })
-    .then((number) => {
-      res.send({ message: `${number} People were deleted successfully!` });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while removing all people.",
-      });
-    });
-};
+

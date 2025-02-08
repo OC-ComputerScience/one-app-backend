@@ -118,9 +118,9 @@ exports.delete = (req, res) => {
 };
 // Delete a AppFieldValue with the specified id in the request
 exports.deleteFieldValuesForAppSet = (req, res) => {
-  const id = req.params.id;
+
   const fieldId = req.params.fieldId;
-  const applicationId = req.params. applicationId;
+  const applicationId = req.params.id;
   const setNumber = req.params.setNumber;
 
   AppFieldValue.destroy({

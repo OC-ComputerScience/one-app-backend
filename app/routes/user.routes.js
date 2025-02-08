@@ -10,7 +10,7 @@ module.exports = (app) => {
   router.get("/", [authenticateRoute,isAdmin], user.findAll);
 
   // Retrieve a single User with id
-  router.get("/:id", user.findById);
+  router.get("/:id",[authenticateRoute], user.findById);
 
   // Update a User with id
   router.put("/:id", [authenticateRoute,isAdmin], user.update);
