@@ -24,6 +24,8 @@ exports.create = (req, res) => {
     fieldSequence: req.body.fieldSequence,
     isRequired: req.body.isRequired,
     isEncrypted: req.body.isEncrypted,
+    sorted: req.body.sorted,
+    mask: req.body.mask,
     defaultField: req.body.defaultField,
   };
 

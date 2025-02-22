@@ -35,6 +35,14 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
+      sorted: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      mask: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       defaultField: {
         type: Sequelize.STRING,
         allowNull: true,
