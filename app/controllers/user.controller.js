@@ -3,6 +3,8 @@ const User = db.user;
 const Session = db.session;
 const Op = db.Sequelize.Op;
 const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 // Create and Save a new User
 exports.create = async (req, res) => {
@@ -225,6 +227,147 @@ exports.delete = (req, res) => {
         message: err.message || "Could not delete User with id = " + id,
       });
     });
+};
+
+// Request password reset
+exports.requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).send({
+      message: "Email is required"
+    });
+  }
+
+  try {
+    const user = await User.findOne({
+      where: { email: email }
+    });
+
+    if (!user) {
+      // Don't reveal that the email doesn't exist
+      return res.status(200).send({
+        message: "If your email is registered, you will receive password reset instructions."
+      });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    // Set expiry to 1 hour from now
+    const resetTokenExpiry = new Date();
+    resetTokenExpiry.setHours(resetTokenExpiry.getHours() + 1);
+
+    // Update user with reset token
+    await user.update({
+      resetCode: resetToken,
+      resetTokenExpiry: resetTokenExpiry
+    });
+
+    // Create reset URL
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+    // Send email
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.SMTP_FROM,
+      to: email,
+      subject: 'Password Reset Request',
+      html: `
+        <h1>Password Reset Request</h1>
+        <p>You requested a password reset for your OneApp account.</p>
+        <p>Click the link below to reset your password:</p>
+        <a href="${resetUrl}">Reset Password</a>
+        <p>This link will expire in 1 hour.</p>
+        <p>If you didn't request this, please ignore this email.</p>
+      `
+    });
+
+    res.status(200).send({
+      message: "If your email is registered, you will receive password reset instructions."
+    });
+  } catch (error) {
+    console.error('Password reset request error:', error);
+    res.status(500).send({
+      message: "An error occurred while processing your request."
+    });
+  }
+};
+
+// Reset password
+exports.resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  if (!token || !newPassword) {
+    return res.status(400).send({
+      message: "Token and new password are required"
+    });
+  }
+
+  try {
+    console.log('Attempting to reset password with token:', token);
+    console.log('Request body:', req.body);
+    
+    // First find the user with just the token to see if it exists
+    const userWithToken = await User.findOne({
+      where: { resetCode: token }
+    });
+    
+    if (userWithToken) {
+      console.log('Found user with token:', userWithToken.email);
+      console.log('Token expiry:', userWithToken.resetTokenExpiry);
+      console.log('Current time:', new Date());
+      
+      // Check if token has expired
+      const now = new Date();
+      const expiryDate = new Date(userWithToken.resetTokenExpiry);
+      
+      if (now > expiryDate) {
+        console.log('Token has expired. Now:', now, 'Expiry:', expiryDate);
+        return res.status(400).send({
+          message: "Reset token has expired"
+        });
+      }
+      
+      // Generate new salt and hash password
+      const salt = await getSalt();
+      const hash = await hashPassword(newPassword, salt);
+
+      // Update user's password and clear reset token
+      await userWithToken.update({
+        password: hash,
+        salt: salt,
+        resetCode: null,
+        resetTokenExpiry: null
+      });
+
+      console.log('Password reset successful for user:', userWithToken.email);
+
+      res.status(200).send({
+        message: "Password has been reset successfully"
+      });
+    } else {
+      console.log('No user found with token:', token);
+      return res.status(400).send({
+        message: "Invalid reset token"
+      });
+    }
+  } catch (error) {
+    console.error('Password reset error:', error);
+    console.error('Error stack:', error.stack);
+    res.status(500).send({
+      message: "An error occurred while resetting your password",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
 };
 
 
