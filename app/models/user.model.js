@@ -64,6 +64,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: true,
     },
+    resetTokenExpiry: {
+      type: Sequelize.DATE(6),
+      allowNull: true,
+    },
     password: {
       type: Sequelize.BLOB,
       allowNull: false,
