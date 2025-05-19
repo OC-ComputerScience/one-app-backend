@@ -47,6 +47,7 @@ jobs:
           echo SMTP_PASS = "$SMTP_PASS" >> .env
           echo ACCT_PASS = "$ACCT_PASS" >> .env
           echo SMTP_FROM = "$SMTP_FROM" >> .env
+          echo FRONTEND_URL = "$FRONTEND_URL" >> .env
       - run: npm run bundle
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.1
