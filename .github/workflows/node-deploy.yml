@@ -15,6 +15,14 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}
       DB_NAME: ${{ secrets.DB_NAME }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_SECURE: false
+      SMTP_USER: oneapp@chefscholars.org
+      SMTP_PASS: ${{ secrets.SMTP_PASS }}
+      ACCT_PASS: ${{ secrets.ACCT_PASS }}
+      SMTP_FROM: oneapp@chefscholars.org
+      FRONTEND_URL: https://oneapp.chefscholars.org/
 
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +40,13 @@ jobs:
           echo DB_USER = "$DB_USER" >> .env
           echo DB_NAME = "$DB_NAME" >> .env
           echo SECRET_KEY = "$SECRET_KEY" >> .env
-
+          echo SMTP_HOST = "$SMTP_HOST" >> .env
+          echo SMTP_PORT = "$SMTP_PORT" >> .env
+          echo SMTP_SECURE = "$SMTP_SECURE" >> .env
+          echo SMTP_USER = "$SMTP_USER" >> .env
+          echo SMTP_PASS = "$SMTP_PASS" >> .env
+          echo ACCT_PASS = "$ACCT_PASS" >> .env
+          echo SMTP_FROM = "$SMTP_FROM" >> .env
       - run: npm run bundle
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.1
@@ -42,7 +56,7 @@ jobs:
           REMOTE_USER: ubuntu
           TARGET: "nodeapps/one-app-backend"
           ARGS: "-rltgoDzvO --delete"
-          SOURCE: "deploy/" 
+          SOURCE: "deploy/"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
