@@ -68,6 +68,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DATE(6),
       allowNull: true,
     },
+    lastDownloadDate: {
+      type: Sequelize.DATE(6),
+      allowNull: true,
+    },
     password: {
       type: Sequelize.BLOB,
       allowNull: false,

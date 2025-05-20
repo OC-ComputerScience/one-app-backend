@@ -370,4 +370,34 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
+// Update last download date
+exports.updateLastDownloadDate = async (req, res) => {
+  const userId = req.params.id;
+  const { date } = req.body;
+
+  try {
+    const user = await User.findByPk(userId);
+    
+    if (!user) {
+      return res.status(404).send({
+        message: "User not found"
+      });
+    }
+
+    await user.update({
+      lastDownloadDate: new Date(date)
+    });
+
+    res.status(200).send({
+      message: "Last download date updated successfully",
+      lastDownloadDate: user.lastDownloadDate
+    });
+  } catch (error) {
+    console.error('Update last download date error:', error);
+    res.status(500).send({
+      message: "An error occurred while updating the last download date"
+    });
+  }
+};
+
 
