@@ -22,7 +22,7 @@ jobs:
       SMTP_PASS: ${{ secrets.SMTP_PASS }}
       ACCT_PASS: ${{ secrets.ACCT_PASS }}
       SMTP_FROM: oneapp@chefscholars.org
-      FRONTEND_URL: https://oneapp.chefscholars.org/
+      FRONTEND_URL: https://oneapp.chefscholars.org
 
     steps:
       - uses: actions/checkout@v4
