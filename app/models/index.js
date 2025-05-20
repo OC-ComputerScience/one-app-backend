@@ -82,11 +82,11 @@ db.page.belongsTo(
 // foreign key for download log
 db.university.hasMany(
   db.downloadLog,
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
 );
 db.downloadLog.belongsTo(
   db.university,
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
 );
 
 db.user.hasMany(

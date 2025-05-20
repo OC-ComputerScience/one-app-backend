@@ -27,5 +27,8 @@ module.exports = (app) => {
   // Reset password
   router.post("/password/reset", user.resetPassword);
 
+  // Update last download date
+  router.put("/:id/last-download", [authenticateRoute], user.updateLastDownloadDate);
+
   app.use("/oneapp-api/users", router);
 };
