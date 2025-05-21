@@ -1,10 +1,11 @@
 module.exports = (app) => {
   const auth = require("../controllers/auth.controller.js");
+  const { loginLimiter } = require("../middleware/rateLimiter");
 
   var router = require("express").Router();
 
-  // Login
-  router.post("/login", auth.login);
+  // Login with rate limiting
+  router.post("/login", loginLimiter, auth.login);
 
   // Logout
   router.post("/logout", auth.logout);
