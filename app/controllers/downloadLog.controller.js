@@ -9,10 +9,6 @@ exports.create = (req, res) => {
     const error = new Error("User id cannot be empty for download log!");
     error.statusCode = 400;
     throw error;
-  } else if (req.body.universityId === undefined) {
-    const error = new Error("University id cannot be empty for download log!");
-    error.statusCode = 400;
-    throw error;
   }
 
   // Create a DownloadLog
@@ -20,7 +16,7 @@ exports.create = (req, res) => {
     fileName: req.body.fileName,
     dateTime: req.body.dateTime,
     userId: req.body.userId,
-    universityId: req.body.universityId,
+    universityId: req.body.universityId || null,
   };
   // Save DownloadLog in the database
   DownloadLog.create(downloadLog)
